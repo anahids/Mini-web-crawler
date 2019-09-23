@@ -1,5 +1,5 @@
 # Mini-Web-Crawler
-The project consist in the implementation of a mini web crawler :cobweb:. <br />
+The project consist in the implementation of a mini web crawler :thumbsup:. <br />
 
 1.- Starting with https://www.duden.de/rechtschreibung/Computer <br />
 2.- You need to find all words whose category “Herkunft” says “Englisch” <br />
