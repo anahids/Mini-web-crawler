@@ -1,5 +1,5 @@
 # Mini-Web-Crawler
-The project consist in the implementation of a mini web crawler :telaraña:.
+The project consist in the implementation of a mini web crawler :web:.
 
 1.- Starting with https://www.duden.de/rechtschreibung/Computer
 2.- You need to find all words whose category “Herkunft” says “Englisch”
