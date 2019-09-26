@@ -32,6 +32,22 @@ def checkUmlaut(word):
         nW = word
     return nW 
 
+def processWordPage(wordChecked, splitW, href,word):
+    if wordChecked == splitW[0]:
+        wordUrl = "https://www.duden.de" + href
+        #urls.append(wordUrl)
+        pageWord = requests.get(wordUrl)
+
+        if pageWord.status_code == 200:
+            htmlWordPage = BeautifulSoup(pageWord.text, 'lxml')
+            searchEnglischInHerkunft(htmlWordPage,word)
+        else: 
+            print("Status code of Word Page: " ,pageWord.status_code)
+            print("Repeating request for Word Page: ", wordUrl)
+            processWordPage(wordChecked, splitW, href,word)
+        #return wordUrl # return the first link of each word
+
+
 def crawlOptionalLinks(htmlPage, word):
     #urls = []
     for link in htmlPage.find_all('a', {'class': 'vignette__label'}):
@@ -41,18 +57,8 @@ def crawlOptionalLinks(htmlPage, word):
             splitURl = href.split("/")
             splitW = splitURl[2].split("_")
             wordChecked = checkUmlaut(word)
-
-            if wordChecked == splitW[0]:
-                wordUrl = "https://www.duden.de" + href
-                #urls.append(wordUrl)
-                pageWord = requests.get(wordUrl)
-                
-                if pageWord.status_code == 200:
-                    htmlWordPage = BeautifulSoup(pageWord.text, 'lxml')
-                    searchEnglischInHerkunft(htmlWordPage,word)
-                else: 
-                    print("Status code of Word Page: " ,pageWord.status_code)
-                #return wordUrl # return the first link of each word
+            processWordPage(wordChecked, splitW, href,word)
+            
     #return urls
 
 def processWebPage(word):
@@ -63,6 +69,8 @@ def processWebPage(word):
         crawlOptionalLinks(htmlPage,word)
     else:
         print("Status code of Page: " ,page.status_code)
+        print("Repeating request for Page: ", url)
+        processWebPage(word)
 
 def main():
     germanWords = openAndreadGermanWords()
