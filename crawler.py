@@ -15,23 +15,43 @@ def searchEnglischInHerkunft(htmlWordPage, word):
         if "englisch" in paragraph:
             appendEnglischWords(word)
 
+def checkUmlaut(word):
+    if 'Ä' in word:
+        nW = word.replace("Ä","Ae")
+    elif 'Ö' in word:
+        nW = word.replace("Ö","Oe")
+    elif 'Ü' in word:
+        nW = word.replace("Ü","Ue")
+    elif 'ä' in word:
+        nW = word.replace("ä","ae")
+    elif 'ö' in word:
+        nW = word.replace("ö","oe")
+    elif 'ü' in word:
+        nW = word.replace("ü","ue")
+    else:
+        nW = word
+    return nW 
+
 def crawlOptionalLinks(htmlPage, word):
     #urls = []
     for link in htmlPage.find_all('a', {'class': 'vignette__label'}):
         href = link.get('href')
-        wordUrl = "https://www.duden.de" + href
 
         if href is not None:
             splitURl = href.split("/")
-            splirW = splitURl[2].split("_")
-            if word == splirW[0]:
+            splitW = splitURl[2].split("_")
+            wordChecked = checkUmlaut(word)
+
+            if wordChecked == splitW[0]:
                 wordUrl = "https://www.duden.de" + href
                 #urls.append(wordUrl)
                 pageWord = requests.get(wordUrl)
+                
                 if pageWord.status_code == 200:
                     htmlWordPage = BeautifulSoup(pageWord.text, 'lxml')
                     searchEnglischInHerkunft(htmlWordPage,word)
-                else: print("Status code of Word Page: " ,pageWord.status_code)
+                else: 
+                    print("Status code of Word Page: " ,pageWord.status_code)
                 #return wordUrl # return the first link of each word
     #return urls
 
