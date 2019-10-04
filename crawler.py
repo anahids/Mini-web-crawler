@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 
 def openAndreadGermanWords():
-    with open("test.txt", "r") as germanFile:
+    with open("words.txt", "r") as germanFile:
         return [word.strip() for word in germanFile]
 
 def appendEnglischWords(word):
